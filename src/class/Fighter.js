@@ -13,8 +13,8 @@ export default class Fighter extends Entity {
   }
 
   setImpulse (x, y) {
-    const maxImpulseX = Math.trunc(this.size.width / 10)
-    const maxImpulseY = Math.trunc(this.size.height / 10)
+    const maxImpulseX = Math.trunc(this.size.width / 2)
+    const maxImpulseY = Math.trunc(this.size.height / 2)
 
     this.impulse = {
       x: x >= 0 ? Math.min(x, maxImpulseX) : Math.max(x, maxImpulseX * -1),
@@ -39,5 +39,9 @@ export default class Fighter extends Entity {
           : 0
       )
     }
+  }
+
+  update () {
+    this.normalizeImpulse()
   }
 }

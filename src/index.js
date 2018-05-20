@@ -12,11 +12,11 @@ const fighter = new Fighter()
 world.spawn(platform, fighter)
 
 const viewportThird = viewport.width() / 3
-const platformWidth = viewportThird * 2
-const platformHeight = platformWidth / 10
+const platformWidth = Math.min(viewportThird * 2, 1000)
+const platformHeight = platformWidth / 20
 
 platform.setSize(platformWidth, platformHeight)
-platform.setPosition(viewportThird / 2, viewport.height() / 2 - platformHeight / 2)
+platform.setPosition(viewport.width() / 2 - platformWidth / 2, viewport.height() / 2 - platformHeight / 2)
 
 fighter.setSize(platformHeight, platformHeight)
 

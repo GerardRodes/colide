@@ -38,35 +38,13 @@ export default class World {
   }
 
   gameLoop () {
-    function timestamp () {
-      return window.performance && window.performance.now ? window.performance.now() : new Date().getTime();
-    }
-
-    let now
-    let dt = 0
-    let last = timestamp()
-    let step = 1 / 60
-
-    const frame = () => {
-      now = timestamp()
-      dt = dt + Math.min(1, (now - last) / 1000)
-
-      while (dt > step) {
-        dt = dt - step
-        this.update(step)
-      }
-      last = now
-      window.requestAnimationFrame(frame)
-    }
-
-    window.requestAnimationFrame(frame)
-  }
-
-  update () {
     this.entities.forEach(entity => {
-      if (typeof entity.normalizeImpulse === 'function') {
-        entity.normalizeImpulse()
+      if (typeof entity.update === 'function') {
+        entity.update()
       }
+    })
+    window.requestAnimationFrame(() => {
+      this.gameLoop()
     })
   }
 }
