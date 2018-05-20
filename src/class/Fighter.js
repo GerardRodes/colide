@@ -19,25 +19,53 @@ export default class Fighter extends Entity {
     this._actions = {
       goLeft: {
         active: false,
+        actived_at: 0,
         handler () {
+          if (
+            this._actions.goRight.active &&
+            this._actions.goRight.actived_at > this._actions.goLeft.actived_at
+          ) {
+            return
+          }
           this.setImpulse(this.impulse.x - this.impulseMutation, this.impulse.y)
         }
       },
       goRight: {
         active: false,
+        actived_at: 0,
         handler () {
+          if (
+            this._actions.goLeft.active &&
+            this._actions.goLeft.actived_at > this._actions.goRight.actived_at
+          ) {
+            return
+          }
           this.setImpulse(this.impulse.x + this.impulseMutation, this.impulse.y)
         }
       },
       goUp: {
         active: false,
+        actived_at: 0,
         handler () {
+          if (
+            this._actions.goDown.active &&
+            this._actions.goDown.actived_at > this._actions.goUp.actived_at
+          ) {
+            return
+          }
           this.setImpulse(this.impulse.x, this.impulse.y - this.impulseMutation)
         }
       },
       goDown: {
         active: false,
+        actived_at: 0,
         handler () {
+          if (
+            this._actions.goUp.active &&
+            this._actions.goUp.actived_at > this._actions.goDown.actived_at
+          ) {
+            return
+          }
           this.setImpulse(this.impulse.x, this.impulse.y + this.impulseMutation)
         }
       }
@@ -53,6 +81,7 @@ export default class Fighter extends Entity {
     document.addEventListener('keydown', ({ key }) => {
       if (keyName === key) {
         this._actions[action].active = true
+        this._actions[action].actived_at = new Date().getTime()
       }
     })
     document.addEventListener('keyup', ({ key }) => {
