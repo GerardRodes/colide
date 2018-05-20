@@ -80,14 +80,7 @@ export default class World {
         let newPositionY = entity.position.y + velocity.y
 
         const collisions = this.detectCollisions(entity, newPositionX, newPositionY)
-        if (collisions.length > 1) {
-          console.log('\n')
-        }
         collisions.forEach((collision, index) => {
-          if (collision.area === 0) {
-            return
-          }
-
           if (collisions.length > 1) {
             if (index > 0) {
               const a = {
@@ -100,9 +93,6 @@ export default class World {
                 return
               }
             }
-
-            console.log(index, collision.area)
-            console.log('collision at', collision.at)
           }
 
           switch (collision.at) {
