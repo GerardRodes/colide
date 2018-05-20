@@ -7,8 +7,11 @@ html, body {
 #world {
   width: 100vw;
   height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
   background-color: black;
   position: relative;
+  overflow: hidden;
 }
 
 .entity {
@@ -16,4 +19,15 @@ html, body {
   position: absolute;
   left: 0;
   top: 0;
+}
+
+#data {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 1rem;
+  padding: 1rem;
+  border: 1px solid white;
+  color: white;
+  font-family: monospace;
 }

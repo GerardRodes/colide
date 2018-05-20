@@ -1,7 +1,7 @@
 import World from '~/class/World'
 import Platform from '~/class/Platform'
 import Fighter from '~/class/Fighter'
-import { viewport } from '~/utils'
+import { viewport, createElement } from '~/utils'
 
 import '~/main.css'
 
@@ -19,25 +19,9 @@ platform.setSize(platformWidth, platformHeight)
 platform.setPosition(viewport.width() / 2 - platformWidth / 2, viewport.height() / 2 - platformHeight / 2)
 
 fighter.setSize(platformHeight, platformHeight)
-
-const impulseMutation = 2
-
-document.addEventListener('keydown', ({ key }) => {
-  switch (key) {
-    case 'ArrowLeft':
-      fighter.setImpulse(fighter.impulse.x - impulseMutation, fighter.impulse.y)
-      break
-    case 'ArrowRight':
-      fighter.setImpulse(fighter.impulse.x + impulseMutation, fighter.impulse.y)
-      break
-    case 'ArrowDown':
-      fighter.setImpulse(fighter.impulse.x, fighter.impulse.y + impulseMutation)
-      break
-    case 'ArrowUp':
-      fighter.setImpulse(fighter.impulse.x, fighter.impulse.y - impulseMutation)
-      break
-  }
-})
+fighter.bindActionToKey('goUp', 'ArrowUp')
+fighter.bindActionToKey('goRight', 'ArrowRight')
+fighter.bindActionToKey('goLeft', 'ArrowLeft')
+fighter.bindActionToKey('goDown', 'ArrowDown')
 
 document.body.appendChild(world.$el)
-window.platform = platform

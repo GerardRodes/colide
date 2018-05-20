@@ -16,7 +16,7 @@ export default function createElement (tagName, attrs, children) {
 
   if (typeof children !== 'undefined') {
     children.forEach(child => {
-      el.appendChild(createElement(child))
+      el.appendChild(child instanceof window.Node ? child : createElement(...child))
     })
   }
 
