@@ -80,7 +80,31 @@ export default class World {
         let newPositionY = entity.position.y + velocity.y
 
         const collisions = this.detectCollisions(entity, newPositionX, newPositionY)
-        collisions.forEach(collision => {
+        if (collisions.length > 1) {
+          console.log('\n')
+        }
+        collisions.forEach((collision, index) => {
+          if (collision.area === 0) {
+            return
+          }
+
+          if (collisions.length > 1) {
+            if (index > 0) {
+              const a = {
+                x: newPositionX,
+                y: newPositionY,
+                ...entity.size
+              }
+
+              if (!this.collide(a, collision.coor)) {
+                return
+              }
+            }
+
+            console.log(index, collision.area)
+            console.log('collision at', collision.at)
+          }
+
           switch (collision.at) {
             case 'top':
               newPositionY = collision.with.position.y - entity.size.height
@@ -126,43 +150,55 @@ export default class World {
       }
 
       if (this.collide(a, b)) {
+        const realA = {
+          ...entity.size,
+          ...entity.position
+        }
         let coor = {...b, y: b.y - b.height - a.height / 2}
-        if (this.collide(a, coor)) {
+        if (this.collide(realA, coor)) {
           collisions.push({
             at: 'top',
-            with: anotherEntity
+            with: anotherEntity,
+            area: this.intersectArea(realA, {...b, y: b.y - b.height}),
+            coor: { ...coor }
           })
         }
 
         coor = {...b, y: b.y + b.height + a.height / 2}
-        if (this.collide(a, coor)) {
+        if (this.collide(realA, coor)) {
           collisions.push({
             at: 'bottom',
-            with: anotherEntity
+            with: anotherEntity,
+            area: this.intersectArea(realA, {...b, y: b.y + b.height}),
+            coor: { ...coor }
           })
         }
 
         coor = {...b, x: b.x - b.width - a.width / 2}
-        if (this.collide(a, coor)) {
+        if (this.collide(realA, coor)) {
           collisions.push({
             at: 'left',
-            with: anotherEntity
+            with: anotherEntity,
+            area: this.intersectArea(realA, {...b, x: b.x - b.width}),
+            coor: { ...coor }
           })
         }
 
         coor = {...b, x: b.x + b.width + a.width / 2}
-        if (this.collide(a, coor)) {
+        if (this.collide(realA, coor)) {
           collisions.push({
             at: 'right',
-            with: anotherEntity
+            with: anotherEntity,
+            area: this.intersectArea(realA, {...b, x: b.x + b.width}),
+            coor: { ...coor }
           })
         }
-
-        console.log(collisions)
       }
     })
 
     return collisions
+      .filter(collision => collision.area > 0)
+      .sort((a, b) => a.area <= b.area)
   }
 
   collide (a, b) {
@@ -171,6 +207,13 @@ export default class World {
       (a.y > (b.y + b.height)) ||
       ((a.x + a.width) < b.x) ||
       (a.x > (b.x + b.width))
+    )
+  }
+
+  intersectArea (a, b) {
+    return (
+      Math.max(0, Math.min(a.x + a.width, b.x + b.width) - Math.max(a.x, b.x)) *
+      Math.max(0, Math.min(a.y + a.height, b.y + b.height) - Math.max(a.y, b.y))
     )
   }
 
