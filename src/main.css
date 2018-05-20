@@ -1,0 +1,19 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+}
+
+#world {
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  position: relative;
+}
+
+.entity {
+  background-color: white;
+  position: absolute;
+  left: 0;
+  top: 0;
+}

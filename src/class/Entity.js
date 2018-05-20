@@ -1,41 +1,19 @@
+import Reactive from '~/class/Reactive'
 import { createElement } from '~/utils'
 
-export default class Entity {
+export default class Entity extends Reactive {
   constructor () {
+    super()
     this.$el = createElement('div', { class: 'entity' })
-    this.position = { x: null, y: null }
-    this.size = { width: null, height: null }
+    this.position = { x: 0, y: 0 }
+    this.size = { width: 0, height: 0 }
   }
 
-  set x (x) {
-    this.position.x = x
+  setPosition (x, y) {
+    this.position = { x, y }
   }
 
-  get x () {
-    return this.position.x
-  }
-
-  set y (y) {
-    this.position.y = y
-  }
-
-  get y () {
-    return this.position.y
-  }
-
-  set width (width) {
-    this.size.width = width
-  }
-
-  get width () {
-    return this.size.width
-  }
-
-  set height (height) {
-    this.size.height = height
-  }
-
-  get height () {
-    return this.size.height
+  setSize (width, height) {
+    this.size = { width, height }
   }
 }
