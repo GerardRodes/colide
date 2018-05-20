@@ -77,6 +77,11 @@ export default class World {
         const newPositionX = entity.position.x + velocity.x
         const newPositionY = entity.position.y + velocity.y
 
+        const collisions = this.detectCollisions(entity, newPositionX, newPositionY)
+        if (collisions.length) {
+          return
+        }
+
         entity.setPosition(
           newPositionX >= 0 ? Math.min(newPositionX, viewport.width() - entity.size.width) : 0,
           newPositionY >= 0 ? Math.min(newPositionY, viewport.height() - entity.size.height) : 0
@@ -85,6 +90,62 @@ export default class World {
     }
 
     this.gameLoop()
+  }
+
+  detectCollisions (entity, newX, newY) {
+    const collisions = []
+    const a = {
+      x: newX,
+      y: newY,
+      ...entity.size
+    }
+
+    this.entities.forEach(anotherEntity => {
+      if (entity._id === anotherEntity._id) {
+        return
+      }
+
+      const b = {
+        ...anotherEntity.position,
+        ...anotherEntity.size
+      }
+
+      if (this.collide(a, b)) {
+        const at = []
+
+        if (this.collide(a, {...b, y: b.y - b.height})) {
+          at.push('top')
+        }
+
+        if (this.collide(a, {...b, y: b.y + b.height})) {
+          at.push('bottom')
+        }
+
+        if (this.collide(a, {...b, x: b.x - b.width})) {
+          at.push('left')
+        }
+
+        if (this.collide(a, {...b, x: b.x + b.width})) {
+          at.push('right')
+        }
+
+        collisions.push({
+          at,
+          with: anotherEntity
+        })
+      }
+    })
+
+    return collisions
+  }
+
+  collide (a, b) {
+    return !(
+      ((a.y + a.height) < (b.y)) ||
+      (a.y > (b.y + b.height)) ||
+      ((a.x + a.width) < b.x) ||
+      (a.x > (b.x + b.width))
+    )
   }
 
   spawn (...entities) {

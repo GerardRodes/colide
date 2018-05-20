@@ -1,8 +1,8 @@
 import Entity from './Entity'
 
 export default class Fighter extends Entity {
-  constructor () {
-    super()
+  constructor (id) {
+    super(id)
     this.$el.classList.add('fighter')
 
     this.maxImpulse = 100
@@ -11,6 +11,8 @@ export default class Fighter extends Entity {
       x: 0,
       y: 0
     }
+
+    this.maxVelocity = 10
     this.velocity = {
       x: 0,
       y: 0
@@ -72,9 +74,6 @@ export default class Fighter extends Entity {
     }
 
     this._initReactiveness()
-    this.watch('size', size => {
-      this.maxVelocity = Math.trunc(size.width / 2)
-    })
   }
 
   bindActionToKey (action, keyName) {
