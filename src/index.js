@@ -28,21 +28,29 @@ const setSizes = () => {
     Math.trunc(viewport.height() / 2 - platformHeight / 2)
   )
 
+  fighterOne.setPosition(
+    Math.trunc(viewport.width() / 2 - platformWidth / 4) - platformHeight / 2,
+    Math.trunc(viewport.height() / 2 - platformHeight * 10)
+  )
+
+  fighterTwo.setPosition(
+    Math.trunc(viewport.width() / 2 + platformWidth / 4) - platformHeight / 2,
+    Math.trunc(viewport.height() / 2 - platformHeight * 10)
+  )
+
   fighterOne.setSize(platformHeight, platformHeight)
   fighterTwo.setSize(platformHeight, platformHeight)
 }
 setSizes()
 window.addEventListener('resize', setSizes)
 
-fighterOne.bindActionToKey('goUp', 'ArrowUp')
+fighterOne.bindActionToKey('jump', 'ArrowUp')
 fighterOne.bindActionToKey('goRight', 'ArrowRight')
 fighterOne.bindActionToKey('goLeft', 'ArrowLeft')
-fighterOne.bindActionToKey('goDown', 'ArrowDown')
 
-fighterTwo.bindActionToKey('goUp', 'w')
+fighterTwo.bindActionToKey('jump', 'w')
 fighterTwo.bindActionToKey('goRight', 'd')
 fighterTwo.bindActionToKey('goLeft', 'a')
-fighterTwo.bindActionToKey('goDown', 's')
 
 document.body.appendChild(world.$el)
 window.world = world

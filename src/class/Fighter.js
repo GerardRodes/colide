@@ -19,6 +19,13 @@ export default class Fighter extends Entity {
     }
 
     this._actions = {
+      jump: {
+        active: false,
+        actived_at: 0,
+        handler () {
+          this.setImpulse(this.impulse.x, -60)
+        }
+      },
       goLeft: {
         active: false,
         actived_at: 0,

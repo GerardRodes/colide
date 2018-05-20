@@ -64,8 +64,8 @@ export default class World {
         entity.$el.style.height = Math.trunc(size.height) + 'px'
       },
       impulse (entity, impulse) {
-        this._data.impulse.x.nodeValue = 'x: ' + impulse.x
-        this._data.impulse.y.nodeValue = 'y: ' + impulse.y
+        this._data.impulse.x.nodeValue = 'x: ' + impulse.x.toFixed(2)
+        this._data.impulse.y.nodeValue = 'y: ' + impulse.y.toFixed(2)
 
         entity.setVelocity(
           entity.maxVelocity * impulse.x / 100,
@@ -97,15 +97,19 @@ export default class World {
 
           switch (collision.at) {
             case 'top':
+              entity.impulse.y = 0
               newPositionY = collision.with.position.y - entity.size.height
               break
             case 'bottom':
+              entity.impulse.y = 0
               newPositionY = collision.with.position.y + collision.with.size.height
               break
             case 'left':
+              entity.impulse.x = 0
               newPositionX = collision.with.position.x - entity.size.width
               break
             case 'right':
+              entity.impulse.x = 0
               newPositionX = collision.with.position.x + collision.with.size.width
               break
           }
@@ -224,8 +228,13 @@ export default class World {
     this.entities.forEach(entity => {
       if (typeof entity.update === 'function') {
         entity.update()
+        entity.setImpulse(
+          entity.impulse.x,
+          entity.impulse.y + 8
+        )
       }
     })
+
     window.requestAnimationFrame(() => {
       this.gameLoop()
     })
