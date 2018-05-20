@@ -53,17 +53,19 @@ export default class World {
 
     this.listeners = {
       position (entity, position) {
-        this._data.position.x.nodeValue = 'x: ' + Math.trunc(position.x)
-        this._data.position.y.nodeValue = 'y: ' + Math.trunc(position.y)
-        entity.$el.style.transform = `translate(${position.x}px, ${position.y}px)`
+        const newX = Math.trunc(position.x)
+        const newY = Math.trunc(position.y)
+        this._data.position.x.nodeValue = 'x: ' + newX
+        this._data.position.y.nodeValue = 'y: ' + newY
+        entity.$el.style.transform = `translateZ(0) scale(1.0, 1.0) translate(${newX}px, ${newY}px)`
       },
       size (entity, size) {
-        entity.$el.style.width = size.width + 'px'
-        entity.$el.style.height = size.height + 'px'
+        entity.$el.style.width = Math.trunc(size.width) + 'px'
+        entity.$el.style.height = Math.trunc(size.height) + 'px'
       },
       impulse (entity, impulse) {
-        this._data.impulse.x.nodeValue = 'x: ' + impulse.x.toFixed(2)
-        this._data.impulse.y.nodeValue = 'y: ' + impulse.y.toFixed(2)
+        this._data.impulse.x.nodeValue = 'x: ' + impulse.x
+        this._data.impulse.y.nodeValue = 'y: ' + impulse.y
 
         entity.setVelocity(
           entity.maxVelocity * impulse.x / 100,
@@ -71,16 +73,29 @@ export default class World {
         )
       },
       velocity (entity, velocity) {
-        this._data.velocity.x.nodeValue = 'x: ' + Math.trunc(velocity.x)
-        this._data.velocity.y.nodeValue = 'y: ' + Math.trunc(velocity.y)
+        this._data.velocity.x.nodeValue = 'x: ' + velocity.x.toFixed(2)
+        this._data.velocity.y.nodeValue = 'y: ' + velocity.y.toFixed(2)
 
-        const newPositionX = entity.position.x + velocity.x
-        const newPositionY = entity.position.y + velocity.y
+        let newPositionX = entity.position.x + velocity.x
+        let newPositionY = entity.position.y + velocity.y
 
         const collisions = this.detectCollisions(entity, newPositionX, newPositionY)
-        if (collisions.length) {
-          return
-        }
+        collisions.forEach(collision => {
+          switch (collision.at) {
+            case 'top':
+              newPositionY = collision.with.position.y - entity.size.height
+              break
+            case 'bottom':
+              newPositionY = collision.with.position.y + collision.with.size.height
+              break
+            case 'left':
+              newPositionX = collision.with.position.x - entity.size.width
+              break
+            case 'right':
+              newPositionX = collision.with.position.x + collision.with.size.width
+              break
+          }
+        })
 
         entity.setPosition(
           newPositionX >= 0 ? Math.min(newPositionX, viewport.width() - entity.size.width) : 0,
@@ -111,28 +126,39 @@ export default class World {
       }
 
       if (this.collide(a, b)) {
-        const at = []
-
-        if (this.collide(a, {...b, y: b.y - b.height})) {
-          at.push('top')
+        let coor = {...b, y: b.y - b.height - a.height / 2}
+        if (this.collide(a, coor)) {
+          collisions.push({
+            at: 'top',
+            with: anotherEntity
+          })
         }
 
-        if (this.collide(a, {...b, y: b.y + b.height})) {
-          at.push('bottom')
+        coor = {...b, y: b.y + b.height + a.height / 2}
+        if (this.collide(a, coor)) {
+          collisions.push({
+            at: 'bottom',
+            with: anotherEntity
+          })
         }
 
-        if (this.collide(a, {...b, x: b.x - b.width})) {
-          at.push('left')
+        coor = {...b, x: b.x - b.width - a.width / 2}
+        if (this.collide(a, coor)) {
+          collisions.push({
+            at: 'left',
+            with: anotherEntity
+          })
         }
 
-        if (this.collide(a, {...b, x: b.x + b.width})) {
-          at.push('right')
+        coor = {...b, x: b.x + b.width + a.width / 2}
+        if (this.collide(a, coor)) {
+          collisions.push({
+            at: 'right',
+            with: anotherEntity
+          })
         }
 
-        collisions.push({
-          at,
-          with: anotherEntity
-        })
+        console.log(collisions)
       }
     })
 

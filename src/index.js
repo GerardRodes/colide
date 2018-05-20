@@ -7,31 +7,42 @@ import '~/main.css'
 
 const world = new World()
 const platform = new Platform('platform')
-const fighter = new Fighter('fighter')
+const fighterOne = new Fighter('fighter-1')
+const fighterTwo = new Fighter('fighter-2')
 
-world.spawn(platform, fighter)
+world.spawn(platform, fighterOne, fighterTwo)
 
 platform.watch('size', size => {
-  fighter.maxVelocity = Math.trunc(size.width / 50)
+  fighterOne.maxVelocity = Math.trunc(size.width / 50)
+  fighterTwo.maxVelocity = Math.trunc(size.width / 50)
 })
 
 const setSizes = () => {
-  const viewportThird = viewport.width() / 3
-  const platformWidth = Math.min(viewportThird * 2, 1000)
-  const platformHeight = platformWidth / 20
+  const viewportThird = Math.trunc(viewport.width() / 3)
+  const platformWidth = Math.trunc(Math.min(viewportThird * 2, 1000))
+  const platformHeight = Math.trunc(platformWidth / 20)
 
   platform.setSize(platformWidth, platformHeight)
-  platform.setPosition(viewport.width() / 2 - platformWidth / 2, viewport.height() / 2 - platformHeight / 2)
+  platform.setPosition(
+    Math.trunc(viewport.width() / 2 - platformWidth / 2),
+    Math.trunc(viewport.height() / 2 - platformHeight / 2)
+  )
 
-  fighter.setSize(platformHeight, platformHeight)
+  fighterOne.setSize(platformHeight, platformHeight)
+  fighterTwo.setSize(platformHeight, platformHeight)
 }
 setSizes()
 window.addEventListener('resize', setSizes)
 
-fighter.bindActionToKey('goUp', 'ArrowUp')
-fighter.bindActionToKey('goRight', 'ArrowRight')
-fighter.bindActionToKey('goLeft', 'ArrowLeft')
-fighter.bindActionToKey('goDown', 'ArrowDown')
+fighterOne.bindActionToKey('goUp', 'ArrowUp')
+fighterOne.bindActionToKey('goRight', 'ArrowRight')
+fighterOne.bindActionToKey('goLeft', 'ArrowLeft')
+fighterOne.bindActionToKey('goDown', 'ArrowDown')
+
+fighterTwo.bindActionToKey('goUp', 'w')
+fighterTwo.bindActionToKey('goRight', 'd')
+fighterTwo.bindActionToKey('goLeft', 'a')
+fighterTwo.bindActionToKey('goDown', 's')
 
 document.body.appendChild(world.$el)
 window.world = world
