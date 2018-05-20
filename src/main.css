@@ -32,3 +32,11 @@ html, body {
   color: white;
   font-family: monospace;
 }
+
+.fighter-1 {
+  background-color: aqua;
+}
+
+.fighter-2 {
+  background-color: crimson;
+}

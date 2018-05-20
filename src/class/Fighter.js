@@ -4,9 +4,10 @@ export default class Fighter extends Entity {
   constructor (id) {
     super(id)
     this.$el.classList.add('fighter')
+    this.$el.classList.add(id)
 
     this.maxImpulse = 100
-    this.impulseMutation = 3
+    this.impulseMutation = 2
     this.impulse = {
       x: 0,
       y: 0
@@ -17,13 +18,17 @@ export default class Fighter extends Entity {
       x: 0,
       y: 0
     }
+    this.jumps = 1
 
     this._actions = {
       jump: {
         active: false,
         actived_at: 0,
         handler () {
-          this.setImpulse(this.impulse.x, -60)
+          if (this.jumps > 0) {
+            this.jumps--
+            this.setImpulse(this.impulse.x, -60)
+          }
         }
       },
       goLeft: {

@@ -98,6 +98,11 @@ export default class World {
           switch (collision.at) {
             case 'top':
               entity.impulse.y = 0
+              ;(function (entity) {
+                setTimeout(() => {
+                  entity.jumps = 1
+                }, 100)
+              })(entity)
               newPositionY = collision.with.position.y - entity.size.height
               break
             case 'bottom':
@@ -230,7 +235,7 @@ export default class World {
         entity.update()
         entity.setImpulse(
           entity.impulse.x,
-          entity.impulse.y + 8
+          entity.impulse.y + 4
         )
       }
     })

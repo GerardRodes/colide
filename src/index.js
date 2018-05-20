@@ -44,13 +44,13 @@ const setSizes = () => {
 setSizes()
 window.addEventListener('resize', setSizes)
 
-fighterOne.bindActionToKey('jump', 'ArrowUp')
-fighterOne.bindActionToKey('goRight', 'ArrowRight')
-fighterOne.bindActionToKey('goLeft', 'ArrowLeft')
+fighterTwo.bindActionToKey('jump', 'ArrowUp')
+fighterTwo.bindActionToKey('goRight', 'ArrowRight')
+fighterTwo.bindActionToKey('goLeft', 'ArrowLeft')
 
-fighterTwo.bindActionToKey('jump', 'w')
-fighterTwo.bindActionToKey('goRight', 'd')
-fighterTwo.bindActionToKey('goLeft', 'a')
+fighterOne.bindActionToKey('jump', 'w')
+fighterOne.bindActionToKey('goRight', 'd')
+fighterOne.bindActionToKey('goLeft', 'a')
 
 document.body.appendChild(world.$el)
 window.world = world
